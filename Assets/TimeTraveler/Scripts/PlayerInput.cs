@@ -1,26 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] private PlayerCharacter _character;
-    [SerializeField] private GameMap _gameMap;
+    private PlayerCharacter _character;
     [SerializeField] private List<GameAction> gameActions;
 
     private MoveValidator _moveValidator;
     private CharacterMover Mover => this._character.Mover;
 
-    public void Start()
-    {
-        this.Init(this._character);
-        _character.Mover.Init(_gameMap);
-    }
-
-    public void Init(PlayerCharacter character)
+    public void Init(PlayerCharacter character, MoveValidator validator)
     {
         this._character = character;
-        this._moveValidator = new MoveValidator(_gameMap);
+        this._moveValidator = validator;
     }
 
     void Update()
@@ -51,6 +43,7 @@ public class PlayerInput : MonoBehaviour
             {
                 this.Mover.Move(direction);
             }
+            StateMachine.Instance.EndTurn();
         }
     }
 

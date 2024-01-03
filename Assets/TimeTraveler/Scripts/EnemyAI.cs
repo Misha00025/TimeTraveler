@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour, ITurnable
 {
-    [SerializeField] private GameMap _gameMap;
     [SerializeField] private List<GameAction> _actions = new List<GameAction>();
     [SerializeField] private bool _isMovesLooped = true;
 
@@ -12,11 +11,15 @@ public class EnemyAI : MonoBehaviour, ITurnable
     private Vector2Int currentDirection;
     private int moveStep = 0;
 
-    // Start is called before the first fr ame update
-    void Start()
+    public void Start()
+    {
+        StateMachine.Instance.AddTurnable(this);
+    }
+
+    public void Init(GameMap gameMap)
     {
         _characterMover = GetComponent<CharacterMover>();
-        _characterMover.Init(_gameMap);
+        _characterMover.Init(gameMap);
     }
 
     public void OnTurn()
@@ -49,7 +52,7 @@ public class EnemyAI : MonoBehaviour, ITurnable
 
         if (counter >= 1)
         {
-            OnTurn();
+            //OnTurn();
             counter = 0;
         }
     }

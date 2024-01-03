@@ -9,8 +9,9 @@ public class PlayerCharacter : MonoBehaviour
 
     public CharacterMover Mover => this._characterMover;
 
-    public void Start()
+    public void Init(GameMap gameMap)
     {
         this._characterMover = this.GetComponent<CharacterMover>();
+        Mover.Init(gameMap);
     }
 }
