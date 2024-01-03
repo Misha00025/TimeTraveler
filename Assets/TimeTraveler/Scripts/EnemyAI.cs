@@ -53,16 +53,4 @@ public class EnemyAI : MonoBehaviour, ITurnable
 
         Debug.Log("My turn!");
     }
-
-    float counter = 0;
-    void Update()
-    {
-        counter += Time.deltaTime;
-
-        if (counter >= 1)
-        {
-            OnTurn();
-            counter = 0;
-        }
-    }
 }
