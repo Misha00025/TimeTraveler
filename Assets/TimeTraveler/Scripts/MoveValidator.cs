@@ -2,14 +2,21 @@
 
 public interface IMoveValidator
 {
-    bool CanMoveTo(GameMap gameMap, Vector3Int position, Vector3Int newPosition);
+    bool CanMove(Vector3Int position, Vector3Int newPosition);
 }
 
 public class MoveValidator : IMoveValidator
 {
-    public bool CanMoveTo(GameMap gameMap, Vector3Int position, Vector3Int newPosition)
+    private GameMap _gameMap;
+
+    public MoveValidator(GameMap gameMap) 
+    { 
+        this._gameMap = gameMap;
+    }
+
+    public bool CanMove(Vector3Int from, Vector3Int to)
     {
-        float magnitude = (position - newPosition).magnitude;
-        return gameMap.IsWall(newPosition) && magnitude < 1.1f;
+        float magnitude = (from - to).magnitude;
+        return !this._gameMap.IsWall(to) && magnitude < 1.1f;
     }
 }

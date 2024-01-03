@@ -20,10 +20,16 @@ public class CharacterMover : MonoBehaviour, IMovable
         }
     }
 
-    public void Move(Vector2Int direction)
+    public Vector3Int CalculateNewPosition(Vector2Int direction)
     {
         Vector3Int position = this.CellPosition;
         Vector3Int newPosition = position + (Vector3Int)direction;
+        return newPosition;
+    }
+
+    public void Move(Vector2Int direction)
+    {
+        Vector3Int newPosition = this.CalculateNewPosition(direction);
         this.transform.position = this._gameMap.GetCellWorldPosition(newPosition);
     }
 
