@@ -6,12 +6,11 @@ using UnityEngine.Tilemaps;
 public class BulletFactory : MonoBehaviour
 {
     [SerializeField] private Bullet _bulletPrefab;
-    [SerializeField] private GameMap _gameMap;
-
+     
     public Bullet CreateBullet(Vector3Int currentCell, Vector2Int direction, GameMap gameMap)
     {
         // spawn bullet on the next cell
-        var currentPosition = _gameMap.GetCellWorldPosition(currentCell + (Vector3Int)direction);
+        var currentPosition = gameMap.GetCellWorldPosition(currentCell + (Vector3Int)direction);
         var bullet = Instantiate(_bulletPrefab);
 
         bullet.transform.position = currentPosition;

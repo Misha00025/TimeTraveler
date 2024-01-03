@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour, ITurnable
     private CharacterMover _characterMover;
     private Vector2Int _direction;
 
-    private void Start()
+    private void Awake()
     {
         _characterMover = GetComponent<CharacterMover>();
     }

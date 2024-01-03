@@ -13,13 +13,17 @@ public class EnemyAI : MonoBehaviour, ITurnable
     private BulletFactory _bulletFactory;
     private int moveStep = 0;
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         _characterMover = GetComponent<CharacterMover>();
         _bulletFactory = GetComponent<BulletFactory>();
         _characterMover.Init(_gameMap);
+        StateMachine.Instance.AddTurnable(this);
+    }
+
+    public void Init(GameMap gameMap)
+    {
+        _gameMap = gameMap;
     }
 
     public void OnTurn()
