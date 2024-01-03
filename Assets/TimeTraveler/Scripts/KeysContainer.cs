@@ -17,5 +17,7 @@ public enum GameAction
     Right,
     Up,
     Down,
-    MainAction
+    MainAction,
+    Attack
+
 }
