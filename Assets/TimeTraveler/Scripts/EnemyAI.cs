@@ -7,15 +7,18 @@ public class EnemyAI : MonoBehaviour, ITurnable
     [SerializeField] private GameMap _gameMap;
     [SerializeField] private List<GameAction> _actions = new List<GameAction>();
     [SerializeField] private bool _isMovesLooped = true;
+    [SerializeField] private Vector2Int currentDirection = Vector2Int.right;
 
     private CharacterMover _characterMover;
-    private Vector2Int currentDirection;
+    private BulletFactory _bulletFactory;
     private int moveStep = 0;
 
-    // Start is called before the first fr ame update
+
+    // Start is called before the first frame update
     void Start()
     {
         _characterMover = GetComponent<CharacterMover>();
+        _bulletFactory = GetComponent<BulletFactory>();
         _characterMover.Init(_gameMap);
     }
 
@@ -31,6 +34,11 @@ public class EnemyAI : MonoBehaviour, ITurnable
                 Debug.Log($"Moving into{direction}");
                 _characterMover.Move(direction);
                 currentDirection = direction;
+            }
+
+            if (currentAction == GameAction.Attack)
+            {
+                _bulletFactory.CreateBullet(_characterMover.CellPosition, currentDirection, _gameMap);
             }
         }
 

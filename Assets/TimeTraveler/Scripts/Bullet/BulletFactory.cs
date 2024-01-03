@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BulletFactory : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private GameMap _gameMap;
 
-    // Update is called once per frame
-    void Update()
+    public Bullet CreateBullet(Vector3Int currentCell, Vector2Int direction, GameMap gameMap)
     {
-        
+        // spawn bullet on the next cell
+        var currentPosition = _gameMap.GetCellWorldPosition(currentCell + (Vector3Int)direction);
+        var bullet = Instantiate(_bulletPrefab);
+
+        bullet.transform.position = currentPosition;
+        bullet.Init(direction, gameMap);
+        return bullet;
     }
 }

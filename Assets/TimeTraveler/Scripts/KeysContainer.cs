@@ -19,5 +19,4 @@ public enum GameAction
     Down,
     MainAction,
     Attack
-
 }
