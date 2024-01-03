@@ -47,4 +47,10 @@ public class CharacterMover : MonoBehaviour, IMovable
         }
         return direction;
     }
+
+    public bool TryCastDirection(GameAction action, out Vector2Int direction)
+    {
+        direction = CastDirection(action);
+        return direction != Vector2Int.zero;
+    }
 }
