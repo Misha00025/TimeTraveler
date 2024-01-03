@@ -6,6 +6,7 @@ public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private PlayerCharacter _character;
     [SerializeField] private GameMap _gameMap;
+    [SerializeField] private List<GameAction> gameActions;
 
     public void Start()
     {
@@ -20,19 +21,14 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         Vector2Int direction = Vector2Int.zero;
-        switch (this.GetAction())
+        var action = this.GetAction();
+        switch (action)
         {
             case GameAction.Left:
-                direction = Vector2Int.left;
-                break;
             case GameAction.Right:
-                direction = Vector2Int.right;
-                break; 
             case GameAction.Up:
-                direction = Vector2Int.up;
-                break;
             case GameAction.Down:
-                direction = Vector2Int.down;
+                direction = this._character.Mover.CastDirection(action);
                 break;
             case GameAction.MainAction:
                 Debug.Log("Main Action");
