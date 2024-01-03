@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class StateMachine : MonoBehaviour
 {
@@ -19,20 +20,16 @@ public class StateMachine : MonoBehaviour
     }
 
     private List<ITurnable> _turnables = new List<ITurnable>();
+    private UnityEvent _turnEnded = new UnityEvent();
 
     public void AddTurnable(ITurnable turnable)
     {
         this._turnables.Add(turnable);
+        this._turnEnded.AddListener(turnable.OnTurn);
     }
 
     public void EndTurn()
     {
-        foreach (var turnable in _turnables)
-        {
-            if (turnable != null)
-            {
-                turnable.OnTurn();
-            }
-        }
+        this._turnEnded.Invoke();
     }
 }

@@ -13,6 +13,8 @@ public class BulletFactory : MonoBehaviour
         var currentPosition = gameMap.GetCellWorldPosition(currentCell + (Vector3Int)direction);
         var bullet = Instantiate(_bulletPrefab);
 
+        StateMachine.Instance.AddTurnable(bullet);
+
         bullet.transform.position = currentPosition;
         bullet.Init(direction, gameMap);
         return bullet;
