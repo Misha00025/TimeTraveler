@@ -8,19 +8,25 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private GameMap _gameMap;
     [SerializeField] private List<GameAction> gameActions;
 
+    private MoveValidator _moveValidator;
+    private CharacterMover Mover => this._character.Mover;
+
     public void Start()
     {
+        this.Init(this._character);
         _character.Mover.Init(_gameMap);
     }
 
     public void Init(PlayerCharacter character)
     {
         this._character = character;
+        this._moveValidator = new MoveValidator(_gameMap);
     }
 
     void Update()
     {
         Vector2Int direction = Vector2Int.zero;
+        bool move = false;
         var action = this.GetAction();
         switch (action)
         {
@@ -28,16 +34,23 @@ public class PlayerInput : MonoBehaviour
             case GameAction.Right:
             case GameAction.Up:
             case GameAction.Down:
-                direction = this._character.Mover.CastDirection(action);
+                move = this._character.Mover.TryCastDirection(action, out direction);
                 break;
             case GameAction.MainAction:
                 Debug.Log("Main Action");
                 break;
         }
-        if (direction != Vector2Int.zero)
+
+        if (move)
         {
-            this._character.Mover.Move(direction);
-            Debug.Log($"Direction: {direction}");
+            Vector3Int position = this.Mover.CellPosition;
+            Vector3Int newPosition = this.Mover.CalculateNewPosition(direction);
+            Debug.Log($"Try move! Direction: {direction}; Next Position: {newPosition}");
+            bool canMove = this._moveValidator.CanMove(position, newPosition);
+            if (canMove)
+            {
+                this.Mover.Move(direction);
+            }
         }
     }
 

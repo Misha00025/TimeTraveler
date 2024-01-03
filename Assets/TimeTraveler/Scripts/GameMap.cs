@@ -17,7 +17,14 @@ public class GameMap : MonoBehaviour
 
     private void FindAllWalls()
     {
-        // Поиск всех стен на указанном TileMap
+        foreach (Vector3Int cellPosition in this._wallsTilemap.cellBounds.allPositionsWithin)
+        {
+            TileBase tile = this._wallsTilemap.GetTile(cellPosition);
+            if (tile != null)
+            {
+                this._wallsPositions.Add(cellPosition);
+            }
+        }
     }
 
     public Vector3Int GetCell(Vector2 position)
