@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour, ITurnable
     [SerializeField] private bool _isMovesLooped = true;
     [SerializeField] private Vector2Int currentDirection = Vector2Int.right;
 
+    private MoveValidator _moveValidator;
     private CharacterMover _characterMover;
     private BulletFactory _bulletFactory;
     private int moveStep = 0;
@@ -18,6 +19,7 @@ public class EnemyAI : MonoBehaviour, ITurnable
         _characterMover = GetComponent<CharacterMover>();
         _bulletFactory = GetComponent<BulletFactory>();
         _characterMover.Init(_gameMap);
+        _moveValidator = new MoveValidator(_gameMap);
         StateMachine.Instance.AddTurnable(this);
     }
 
@@ -36,13 +38,17 @@ public class EnemyAI : MonoBehaviour, ITurnable
             if (isMove)
             {
                 Debug.Log($"Moving into{direction}");
-                _characterMover.Move(direction);
-                currentDirection = direction;
+                bool canMove = _moveValidator.CanMove(_characterMover.CellPosition, _characterMover.CalculateNewPosition(direction));
+                if (canMove)
+                {
+                    _characterMover.Move(direction);
+                    currentDirection = direction;
+                }
             }
 
             if (currentAction == GameAction.Attack)
             {
-                _bulletFactory.CreateBullet(_characterMover.CellPosition, currentDirection, _gameMap);
+                _bulletFactory.CreateBullet(_characterMover.CellPosition, currentDirection, _gameMap).OnTurn();
             }
         }
 

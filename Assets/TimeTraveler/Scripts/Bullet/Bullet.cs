@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour, ITurnable
     private CharacterMover _characterMover;
     private Vector2Int _direction;
     private MoveValidator _validator;
+    private GameMap _gameMap;
 
     private void Awake()
     {
@@ -17,15 +18,28 @@ public class Bullet : MonoBehaviour, ITurnable
         _validator = new MoveValidator(gameMap);
         _characterMover.Init(gameMap);
         _direction = direction;
+        _gameMap = gameMap;
     }
 
     public void OnTurn()
     {
         for (int i=0; i<speed; i++) {
-            if (_validator.CanMove(_characterMover.CellPosition, _characterMover.CalculateNewPosition(_direction)))
+            var newPosition = _characterMover.CalculateNewPosition(_direction);
+            if (_validator.CanMove(_characterMover.CellPosition, newPosition))
+            {
                 _characterMover.Move(_direction);
+            }
             else
-                Destroy(gameObject);
+            {
+                if (_gameMap.IsOccupied(newPosition))
+                {
+                    GameObject gameObject = _gameMap.GetGameObject(newPosition);
+                    _gameMap.Remove(gameObject);
+                    Destroy(gameObject);
+                }
+                _gameMap.Remove(gameObject);
+                Destroy(this.gameObject);
+            }
         }
     }
 }
