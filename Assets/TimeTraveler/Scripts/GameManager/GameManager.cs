@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     void LoadNextLevel()
     {
-        SceneManager.LoadScene(_nextScene.GetInstanceID());
+        SceneManager.LoadScene(_nextScene.name);
     }
 
     private IEnumerator HandleLose()
