@@ -5,7 +5,7 @@ public class PlayerInput : MonoBehaviour
 {
     private PlayerCharacter _character;
     [SerializeField] private List<GameAction> gameActions;
-
+    [SerializeField] private TimeTraveler _timeTraveler;
     private MoveValidator _moveValidator;
     private CharacterMover Mover => this._character.Mover;
 
@@ -28,6 +28,10 @@ public class PlayerInput : MonoBehaviour
             case GameAction.Down:
                 move = this._character.Mover.TryCastDirection(action, out direction);
                 break;
+            case GameAction.TimeTravelAbility:
+                Debug.Log("Travel Action");
+                _timeTraveler.UseAbility(this._character);
+                break;
             case GameAction.MainAction:
                 Debug.Log("Main Action");
                 break;
@@ -42,6 +46,7 @@ public class PlayerInput : MonoBehaviour
             if (canMove)
             {
                 this.Mover.Move(direction);
+                _timeTraveler.RememberDirection(direction);
             }
             StateMachine.Instance.EndTurn();
         }
@@ -55,7 +60,8 @@ public class PlayerInput : MonoBehaviour
             { KeysContainer.Down, GameAction.Down },
             { KeysContainer.Left, GameAction.Left },
             { KeysContainer.Right, GameAction.Right },
-            { KeysContainer.MainAction, GameAction.MainAction }
+            { KeysContainer.MainAction, GameAction.MainAction },
+            { KeysContainer.TimeTravelAbility, GameAction.TimeTravelAbility },
         };
         foreach (KeyCode key in GameActions.Keys)
         {

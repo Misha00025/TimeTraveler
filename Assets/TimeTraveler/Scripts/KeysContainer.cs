@@ -8,6 +8,7 @@ public static class KeysContainer
     public static KeyCode Right = KeyCode.D;
 
     public static KeyCode MainAction = KeyCode.Space;
+    public static KeyCode TimeTravelAbility = KeyCode.R;
 }
 
 public enum GameAction
@@ -18,5 +19,6 @@ public enum GameAction
     Up,
     Down,
     MainAction,
-    Attack
+    Attack,
+    TimeTravelAbility
 }
