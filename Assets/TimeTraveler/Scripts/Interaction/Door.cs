@@ -9,10 +9,12 @@ public class Door : Interactive
     [SerializeField] private Sprite _spriteOpen;
     private SpriteRenderer _renderer;
 
+    public bool IsOpened => _isOpened;
+
     public void Start()
     {
         _renderer = GetComponent<SpriteRenderer>();
-        _renderer.sprite = _spriteClose;
+        Close();
     }
 
     public override void Use()
@@ -31,5 +33,11 @@ public class Door : Interactive
     {
         _isOpened = true;
         _renderer.sprite = _spriteOpen;
+    }
+
+    public void Close()
+    {
+        _isOpened = false;
+        _renderer.sprite = _spriteClose;
     }
 }
