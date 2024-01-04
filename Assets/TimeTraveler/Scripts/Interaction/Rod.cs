@@ -8,6 +8,6 @@ public class Rod : Interactive
 
     public override void Use()
     {
-        throw new System.NotImplementedException();
+        _door.Open();
     }
 }

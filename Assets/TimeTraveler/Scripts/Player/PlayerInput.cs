@@ -7,12 +7,15 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private List<GameAction> gameActions;
     [SerializeField] private TimeTraveler _timeTraveler;
     private MoveValidator _moveValidator;
+    private GameMap _gameMap;
+
     private CharacterMover Mover => this._character.Mover;
 
-    public void Init(PlayerCharacter character, MoveValidator validator)
+    public void Init(PlayerCharacter character, MoveValidator validator, GameMap gameMap)
     {
         this._character = character;
         this._moveValidator = validator;
+        this._gameMap = gameMap;
     }
 
     void Update()
@@ -47,6 +50,13 @@ public class PlayerInput : MonoBehaviour
             {
                 this.Mover.Move(direction);
                 _timeTraveler.RememberDirection(direction);
+            }
+            else
+            {
+                if (_gameMap.TryGet<InteractiveObject>(newPosition, out var interactive))
+                {
+                    interactive.Use();
+                }
             }
             StateMachine.Instance.Turn();
         }

@@ -14,12 +14,24 @@ public class CompositeRoot : MonoBehaviour
     {
         _gameMap.AddListenerToEndOfLoad(_player.Init);
         _gameMap.AddListenerToEndOfLoad(InitInput);
+        _gameMap.AddListenerToEndOfLoad(InitInteractive);
         this.InstanceEnemy();
     }
 
     private void InitInput(GameMap gameMap)
     {
-        _input.Init(_player, new MoveValidator(gameMap));
+        _input.Init(_player, new MoveValidator(gameMap), gameMap);
+    }
+
+    private void InitInteractive(GameMap gameMap)
+    {
+        InteractiveObject[] interactives = FindObjectsByType<InteractiveObject>(FindObjectsSortMode.None);
+        foreach (InteractiveObject interactiveObject in interactives)
+        {
+            Vector3Int cell = _gameMap.GetCell(interactiveObject.transform.position);
+            interactiveObject.transform.position = _gameMap.GetCellWorldPosition(cell);
+            _gameMap.Set(interactiveObject.gameObject, cell);
+        }
     }
 
     private void InstanceEnemy()
