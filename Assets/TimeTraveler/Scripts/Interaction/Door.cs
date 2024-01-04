@@ -22,6 +22,7 @@ public class Door : Interactive
         if ( _isOpened )
         {
             Debug.Log("You Win!");
+            GameManager.Instance.Win();
         }
         else
         {
