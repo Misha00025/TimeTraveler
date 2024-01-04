@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour, ITurnable
 
     public void OnTurn()
     {
-        for (int i=0; i<speed; i++) {
+        for (int i=0; i < speed; i++) {
             var newPosition = _characterMover.CalculateNewPosition(_direction);
             if (_validator.CanMove(_characterMover.CellPosition, newPosition))
             {
@@ -36,14 +36,13 @@ public class Bullet : MonoBehaviour, ITurnable
                 var blow = _blowFactory.CreateBlow(newPosition, _gameMap);
                 StateMachine.Instance.AddTurnable(blow);
 
-                if (_gameMap.IsOccupied(newPosition))
+                if (_gameMap.TryGet<Destroyable>(newPosition, out var destroyable))
                 {
-                    GameObject gameObject = _gameMap.GetGameObject(newPosition);
-                    _gameMap.Remove(gameObject);
-                    Destroy(gameObject);
+                    StateMachine.Instance.AddToDestroy(destroyable);
                 }
-                _gameMap.Remove(gameObject);
-                Destroy(this.gameObject);
+
+                StateMachine.Instance.AddToDestroy(GetComponent<Destroyable>());
+                return;
             }
         }
     }

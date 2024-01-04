@@ -48,7 +48,7 @@ public class PlayerInput : MonoBehaviour
                 this.Mover.Move(direction);
                 _timeTraveler.RememberDirection(direction);
             }
-            StateMachine.Instance.EndTurn();
+            StateMachine.Instance.Turn();
         }
     }
 

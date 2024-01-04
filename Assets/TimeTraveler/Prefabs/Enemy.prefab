@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4433982302043273022}
   - component: {fileID: 702157718171981300}
   - component: {fileID: -8949455772908508596}
+  - component: {fileID: -6631677724444309063}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -129,3 +130,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 677987962690485229, guid: 71f1a5e8e94acdd4b99c548ddca4c859, type: 3}
+--- !u!114 &-6631677724444309063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7409457921304771445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b150c75aadb94bb41bca8d1386ff4630, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
