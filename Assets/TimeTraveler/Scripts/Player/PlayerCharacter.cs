@@ -14,4 +14,9 @@ public class PlayerCharacter : MonoBehaviour
         this._characterMover = this.GetComponent<CharacterMover>();
         Mover.Init(gameMap);
     }
+
+    public void OnDestroy()
+    {
+        GameManager.Instance.Lose();
+    }
 }
