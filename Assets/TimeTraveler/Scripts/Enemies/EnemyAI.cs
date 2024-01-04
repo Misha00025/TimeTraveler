@@ -56,7 +56,5 @@ public class EnemyAI : MonoBehaviour, ITurnable
         {
             moveStep = 0;
         }
-
-        Debug.Log("My turn!");
     }
 }

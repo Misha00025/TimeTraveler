@@ -7,10 +7,12 @@ public class Bullet : MonoBehaviour, ITurnable
     private Vector2Int _direction;
     private MoveValidator _validator;
     private GameMap _gameMap;
+    private BlowFactory _blowFactory;
 
     private void Awake()
     {
         _characterMover = GetComponent<CharacterMover>();
+        _blowFactory = GetComponent<BlowFactory>();
     }
 
     public void Init(Vector2Int direction, GameMap gameMap) 
@@ -31,6 +33,9 @@ public class Bullet : MonoBehaviour, ITurnable
             }
             else
             {
+                var blow = _blowFactory.CreateBlow(newPosition, _gameMap);
+                StateMachine.Instance.AddTurnable(blow);
+
                 if (_gameMap.IsOccupied(newPosition))
                 {
                     GameObject gameObject = _gameMap.GetGameObject(newPosition);
