@@ -12,9 +12,14 @@ public class CompositeRoot : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        _player.Init(_gameMap);
-        _input.Init(_player, new MoveValidator(_gameMap));
+        _gameMap.AddListenerToEndOfLoad(_player.Init);
+        _gameMap.AddListenerToEndOfLoad(InitInput);
         this.InstanceEnemy();
+    }
+
+    private void InitInput(GameMap gameMap)
+    {
+        _input.Init(_player, new MoveValidator(gameMap));
     }
 
     private void InstanceEnemy()
@@ -22,7 +27,7 @@ public class CompositeRoot : MonoBehaviour
         EnemyAI[] enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
         foreach (EnemyAI enemy in enemies)
         {
-            enemy.Init(_gameMap);
+            _gameMap.AddListenerToEndOfLoad(enemy.Init);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public interface IMovable
@@ -7,16 +8,20 @@ public interface IMovable
 
 public class CharacterMover : MonoBehaviour, IMovable
 {
+    [SerializeField] private float _speed = 0.001f;
     private GameMap _gameMap;
+    private Vector3Int _cellPosition;
+    private Coroutine _coroutine;
 
     public Vector2 Position2D => new Vector2(this.transform.position.x, this.transform.position.y);
-    public Vector3Int CellPosition => this._gameMap.GetCell(this.Position2D);
+    public Vector3Int CellPosition => _cellPosition;
 
     public void Init(GameMap gameMap)
     {
         if (this._gameMap == null)
         {
             this._gameMap = gameMap;
+            this._cellPosition = gameMap.GetCell(Position2D);
         }
     }
 
@@ -30,9 +35,25 @@ public class CharacterMover : MonoBehaviour, IMovable
     public void Move(Vector2Int direction)
     {
         Vector3Int newPosition = this.CalculateNewPosition(direction);
-        this.transform.position = this._gameMap.GetCellWorldPosition(newPosition);
+        this._cellPosition = newPosition;
+        Vector3 target = this._gameMap.GetCellWorldPosition(newPosition);
         this._gameMap.Set(gameObject, newPosition);
+        if (this._coroutine != null)
+            StopCoroutine(this._coroutine);
+        _coroutine = StartCoroutine(SmoothMovement(target));
     }
+
+    private IEnumerator SmoothMovement(Vector3 target)
+    {
+        Vector3 direction = (target - transform.position).normalized;
+        float distance = 0f;
+        while (Mathf.Abs((transform.position - target).magnitude) > _speed)
+        {
+            distance += this._speed;
+            transform.position += direction * this._speed;
+            yield return null;
+        }
+    } 
 
     public Vector2Int CastDirection(GameAction action)
     {

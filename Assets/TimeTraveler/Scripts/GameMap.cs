@@ -1,6 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Grid))]
@@ -12,10 +13,24 @@ public class GameMap : MonoBehaviour
     private Dictionary<GameObject, Vector3Int> _gameObjects = new();
     private Grid _grid;
 
+    private UnityEvent<GameMap> _loaded = new UnityEvent<GameMap>();
+
     public void Start()
     {
         this._grid = this.GetComponent<Grid>();
         this.FindAllWalls();
+        StartCoroutine(WaitOfLoadLevel());
+    }
+
+    private IEnumerator WaitOfLoadLevel()
+    {
+        yield return null;
+        _loaded.Invoke(this);
+    }
+
+    public void AddListenerToEndOfLoad(UnityAction<GameMap> action)
+    {
+        _loaded.AddListener(action);
     }
 
     private void FindAllWalls()

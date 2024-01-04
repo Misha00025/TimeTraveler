@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d59940c1907f64787be38923244310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 0.001
 --- !u!114 &4433982302043273022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,4 +129,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 677987962690485229, guid: 71f1a5e8e94acdd4b99c548ddca4c859, type: 3}
-  _gameMap: {fileID: 0}

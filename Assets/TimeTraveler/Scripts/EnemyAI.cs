@@ -18,14 +18,14 @@ public class EnemyAI : MonoBehaviour, ITurnable
     {
         _characterMover = GetComponent<CharacterMover>();
         _bulletFactory = GetComponent<BulletFactory>();
-        _characterMover.Init(_gameMap);
-        _moveValidator = new MoveValidator(_gameMap);
-        StateMachine.Instance.AddTurnable(this);
     }
 
     public void Init(GameMap gameMap)
     {
         _gameMap = gameMap;
+        _characterMover.Init(_gameMap);
+        _moveValidator = new MoveValidator(_gameMap);
+        StateMachine.Instance.AddTurnable(this);
     }
 
     public void OnTurn()
