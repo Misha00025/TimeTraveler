@@ -43,7 +43,7 @@ public class PlayerInput : MonoBehaviour
             {
                 this.Mover.Move(direction);
             }
-            StateMachine.Instance.EndTurn();
+            StateMachine.Instance.Turn();
         }
     }
 

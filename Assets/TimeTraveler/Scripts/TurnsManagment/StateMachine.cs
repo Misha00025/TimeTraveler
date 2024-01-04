@@ -5,7 +5,12 @@ using UnityEngine.Events;
 
 public class StateMachine : MonoBehaviour
 {
+    [SerializeField] private GameMap _gameMap;
+
     public static StateMachine Instance { get; private set; }
+    
+    private Queue<Destroyable> _destroyables = new Queue<Destroyable>();
+
 
     private void Awake()
     {
@@ -28,8 +33,25 @@ public class StateMachine : MonoBehaviour
         this._turnEnded.AddListener(turnable.OnTurn);
     }
 
-    public void EndTurn()
+    public void AddToDestroy(Destroyable destroyable)
+    {
+        if (_destroyables.Contains(destroyable))
+            return;
+        _destroyables.Enqueue(destroyable);
+    }
+
+    public void Turn()
     {
         this._turnEnded.Invoke();
+        EndTurn();
+    }
+
+    public void EndTurn()
+    {
+        while (_destroyables.Count > 0)
+        {
+            Destroyable destroyable = _destroyables.Dequeue();
+            destroyable.Destroy(_gameMap);
+        }
     }
 }
