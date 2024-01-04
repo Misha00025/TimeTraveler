@@ -1,12 +1,11 @@
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] SceneAsset _nextScene;
+    [SerializeField] private string _nextScene;
     public GameObject _winText;
     public GameObject _loseText;
 
@@ -50,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     void LoadNextLevel()
     {
-        SceneManager.LoadScene(_nextScene.name);
+        SceneManager.LoadScene(_nextScene);
     }
 
     private IEnumerator HandleLose()

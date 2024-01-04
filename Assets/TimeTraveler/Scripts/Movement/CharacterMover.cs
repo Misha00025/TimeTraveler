@@ -8,7 +8,7 @@ public interface IMovable
 
 public class CharacterMover : MonoBehaviour, IMovable
 {
-    [SerializeField] private float _speed = 0.001f;
+    [SerializeField] private float _speed = 1f;
     private GameMap _gameMap;
     private Vector3Int _cellPosition;
     private Coroutine _coroutine;
@@ -57,11 +57,9 @@ public class CharacterMover : MonoBehaviour, IMovable
     private IEnumerator SmoothMovement(Vector3 target)
     {
         Vector3 direction = (target - transform.position).normalized;
-        float distance = 0f;
-        while (Mathf.Abs((transform.position - target).magnitude) > _speed)
+        while (Mathf.Abs((transform.position - target).magnitude) > 0.001)
         {
-            distance += this._speed;
-            transform.position += direction * this._speed;
+            transform.position = Vector3.MoveTowards(transform.position, target, (_speed * Time.deltaTime));
             yield return null;
         }
     } 

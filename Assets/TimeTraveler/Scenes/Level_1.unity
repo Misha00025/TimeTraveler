@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da160d5b98c960438a8a380b2c4004c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextScene: {fileID: 102900000, guid: 482109f0bf53510478cb3aa3de278afd, type: 3}
+  _nextScene: Level_2
   _winText: {fileID: 1642764159}
   _loseText: {fileID: 388489600}
 --- !u!1 &434840514
