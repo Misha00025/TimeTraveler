@@ -36,7 +36,14 @@ public class TimeTraveler
         var characterMover = player.Mover;
         foreach (var direction in _lastDirections)
         {
-            characterMover.Move(direction * -1);
+            if (_lastDirections.Count > 1)
+            {
+                characterMover.RawMove(direction * -1);
+            } else
+            {
+                characterMover.Move(direction * -1);  
+            }
+
         }
         _lastDirections.Clear();
     }

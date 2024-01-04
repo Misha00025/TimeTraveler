@@ -43,6 +43,17 @@ public class CharacterMover : MonoBehaviour, IMovable
         _coroutine = StartCoroutine(SmoothMovement(target));
     }
 
+    public void RawMove(Vector2Int direction)
+    {
+        Vector3Int newPosition = this.CalculateNewPosition(direction);
+        this._cellPosition = newPosition;
+        Vector3 target = this._gameMap.GetCellWorldPosition(newPosition);
+
+        if (this._coroutine != null)
+            StopCoroutine(this._coroutine);
+        _coroutine = StartCoroutine(SmoothMovement(target));
+    }
+
     private IEnumerator SmoothMovement(Vector3 target)
     {
         Vector3 direction = (target - transform.position).normalized;
