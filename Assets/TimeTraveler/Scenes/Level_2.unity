@@ -2781,7 +2781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da160d5b98c960438a8a380b2c4004c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextScene: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+  _nextScene: {fileID: 102900000, guid: 09032f347c5d1b840bcbe62a1235acfa, type: 3}
   _winText: {fileID: 2071381824}
   _loseText: {fileID: 323389674}
 --- !u!114 &1305473764
