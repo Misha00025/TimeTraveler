@@ -17,6 +17,6 @@ public class MoveValidator : IMoveValidator
     public bool CanMove(Vector3Int from, Vector3Int to)
     {
         float magnitude = (from - to).magnitude;
-        return !this._gameMap.IsWall(to) && magnitude < 1.1f;
+        return !this._gameMap.IsWall(to) && magnitude < 1.1f && !this._gameMap.IsOccupied(to);
     }
 }

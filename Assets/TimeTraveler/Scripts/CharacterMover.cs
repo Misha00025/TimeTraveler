@@ -31,6 +31,7 @@ public class CharacterMover : MonoBehaviour, IMovable
     {
         Vector3Int newPosition = this.CalculateNewPosition(direction);
         this.transform.position = this._gameMap.GetCellWorldPosition(newPosition);
+        this._gameMap.Set(gameObject, newPosition);
     }
 
     public Vector2Int CastDirection(GameAction action)
