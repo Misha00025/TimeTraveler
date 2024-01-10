@@ -40,21 +40,6 @@ public class TestTurns : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (_isRunning && Input.GetKeyDown(KeyCode.Space))
-        {
-            if (_currentTurn.Paused)
-            {
-                _currentTurn.Continue();
-            }
-            else
-            {
-                _currentTurn.Pause();
-            }
-        }
-    }
-
     void FixedUpdate()
     {
         if (_isRunning)

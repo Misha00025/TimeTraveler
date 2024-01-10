@@ -4,33 +4,14 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public abstract class Task
+    public interface IAddetiveTaskSequencer
     {
-        public enum Priority
-        {
-            Low,
-            Medium,
-            High,
-            Max
-        }
-
-        private readonly object _owner;
-
-        public Task(object owner)
-        {
-            _owner = owner;
-        }
-
-        public object Owner { get { return _owner; } }
-
-        public abstract IEnumerator Execute();
+        void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
     }
 
-
-    public interface ITaskSequencer
+    public interface ITaskSequencer : IAddetiveTaskSequencer
     {
-        int GetTasksCount(Task.Priority priority);
-        void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
+        int GetTasksCount(Task.Priority priority);        
         IEnumerator ExecuteTasks(Task.Priority priority);
         bool IsEmpty();
     }

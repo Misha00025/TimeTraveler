@@ -10,9 +10,6 @@ namespace Model
         private const int _maxIterations = 1000;
         private readonly ITaskSequencer _taskSequencer;
 
-        private event Action<bool> _pause;
-        private bool _paused = false;
-
         private event Action _turnStarted;
         private event Action _turnEnded;
 
@@ -20,8 +17,6 @@ namespace Model
         {
             _taskSequencer = taskSequencer;
         }
-
-        public bool Paused => _paused;
 
         public void AddListenerToStart(Action turnStarted)
         {
@@ -44,18 +39,6 @@ namespace Model
             }
             End();
             _turnEnded?.Invoke();
-        }
-
-        public void Continue()
-        {
-            _paused = false;
-            _pause?.Invoke(false);
-        }
-
-        public void Pause()
-        {
-            _paused = true;
-            _pause?.Invoke(true);
         }
 
         protected virtual void Start() { }
