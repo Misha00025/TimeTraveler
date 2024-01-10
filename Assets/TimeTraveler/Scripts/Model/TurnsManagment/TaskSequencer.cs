@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Model
@@ -22,7 +23,7 @@ namespace Model
 
         public object Owner { get { return _owner; } }
 
-        public abstract void Execute();
+        public abstract IEnumerator Execute();
     }
 
 
@@ -30,7 +31,7 @@ namespace Model
     {
         int GetTasksCount(Task.Priority priority);
         void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
-        void ExecuteTasks(Task.Priority priority);
+        IEnumerator ExecuteTasks(Task.Priority priority);
         bool IsEmpty();
     }
 
@@ -58,13 +59,13 @@ namespace Model
             _tasks[priority].Add(task);
         }
 
-        public void ExecuteTasks(Task.Priority priority)
+        public IEnumerator ExecuteTasks(Task.Priority priority)
         {
             Task[] tasks = _tasks[priority].ToArray();
             _tasks[priority].Clear();
             foreach (Task task in tasks)
-            {
-                task.Execute();
+            {                
+                yield return task.Execute();
             }
         }
 

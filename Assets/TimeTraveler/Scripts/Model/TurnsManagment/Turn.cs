@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 
 namespace Model
@@ -25,14 +26,14 @@ namespace Model
             _turnEnded += turnEnded;
         }
 
-        public async void Run()
+        public IEnumerator Run()
         {
             Start(); 
             _turnStarted?.Invoke();
             int iteration = 0;
             while (!_taskSequencer.IsEmpty() && ++iteration <= _maxIterations)
             {
-                await System.Threading.Tasks.Task.Run(Tick);
+                yield return Tick();
             }
             End();
             _turnEnded?.Invoke();
@@ -41,12 +42,12 @@ namespace Model
         protected virtual void Start() { }
         protected virtual void End() { }
 
-        private void Tick()
+        private IEnumerator Tick()
         {
             var priorities = Enum.GetValues(typeof(Task.Priority)).Cast<Task.Priority>().ToArray();
             for (int i = priorities.Length - 1; i >= 0; i--)
-            {                
-                _taskSequencer.ExecuteTasks(priorities[i]);
+            {
+                yield return _taskSequencer.ExecuteTasks(priorities[i]);
             }
         }
     }

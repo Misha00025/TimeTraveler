@@ -1,5 +1,5 @@
 using Model;
-using System.Threading;
+using System.Collections;
 using UnityEngine;
 
 public class TestTurns : MonoBehaviour
@@ -15,10 +15,10 @@ public class TestTurns : MonoBehaviour
             _message = message;
         }
 
-        public override void Execute()
+        public override IEnumerator Execute()
         {
             Debug.Log(_message);
-            Thread.Sleep(500);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -57,7 +57,7 @@ public class TestTurns : MonoBehaviour
         AddLog(Task.Priority.Medium);
         AddLog(Task.Priority.Max);
 
-        turn.Run();
+        StartCoroutine( turn.Run() );
     }
 
     private void AddLog(Task.Priority priority)
