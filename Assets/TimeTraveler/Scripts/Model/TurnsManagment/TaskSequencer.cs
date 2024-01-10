@@ -22,16 +22,17 @@ namespace Model
 
         public Object Owner { get { return _owner; } }
 
-        public abstract void Run();
-        public abstract bool IsRunning();
+        public abstract void Execute();
     }
+
 
     public interface ITaskSequencer
     {
         int GetTasksCount(Task.Priority priority);
         void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
-        void RunTasks(Task.Priority priority);
+        void ExecuteTasks(Task.Priority priority);
     }
+
 
     public class TaskSequencer : ITaskSequencer
     {
@@ -56,13 +57,13 @@ namespace Model
             _tasks[priority].Add(task);
         }
 
-        public void RunTasks(Task.Priority priority)
+        public void ExecuteTasks(Task.Priority priority)
         {
             Task[] tasks = _tasks[priority].ToArray();
             _tasks[priority].Clear();
             foreach (Task task in tasks)
             {
-                task.Run();
+                task.Execute();
             }
         }
     }
