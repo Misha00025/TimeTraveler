@@ -13,14 +13,14 @@ namespace Model
             Max
         }
 
-        private readonly Object _owner;
+        private readonly object _owner;
 
-        public Task(Object owner)
+        public Task(object owner)
         {
             _owner = owner;
         }
 
-        public Object Owner { get { return _owner; } }
+        public object Owner { get { return _owner; } }
 
         public abstract void Execute();
     }

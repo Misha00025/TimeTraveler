@@ -18,7 +18,7 @@ public class TestTurns : MonoBehaviour
         public override void Execute()
         {
             Debug.Log(_message);
-            Thread.Sleep(330);
+            Thread.Sleep(500);
         }
     }
 
