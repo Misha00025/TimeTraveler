@@ -9,7 +9,7 @@ namespace Model
         {
             Low,
             Medium,
-            High,
+            Hight,
             Max
         }
 
@@ -31,6 +31,7 @@ namespace Model
         int GetTasksCount(Task.Priority priority);
         void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
         void ExecuteTasks(Task.Priority priority);
+        bool IsEmpty();
     }
 
 
@@ -65,6 +66,16 @@ namespace Model
             {
                 task.Execute();
             }
+        }
+
+        public bool IsEmpty()
+        {
+            int count = 0;
+            foreach (Task.Priority priority in Enum.GetValues(typeof(Task.Priority)))
+            {
+                count += GetTasksCount(priority);
+            }
+            return count == 0;
         }
     }
 }
