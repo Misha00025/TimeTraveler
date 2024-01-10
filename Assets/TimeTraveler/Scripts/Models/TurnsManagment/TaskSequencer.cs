@@ -10,7 +10,7 @@ namespace Model
         {
             Low,
             Medium,
-            Hight,
+            High,
             Max
         }
 

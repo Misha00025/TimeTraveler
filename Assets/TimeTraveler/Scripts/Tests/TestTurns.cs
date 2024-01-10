@@ -6,6 +6,7 @@ public class TestTurns : MonoBehaviour
 {
     private readonly TaskSequencer _taskSequencer = new TaskSequencer();
     private bool _isRunning = false;
+    private Turn _currentTurn;
 
     private class Log : Task
     {
@@ -22,7 +23,7 @@ public class TestTurns : MonoBehaviour
         }
     }
 
-    private class LogedTurn : Model.Turn
+    private class LogedTurn : Turn
     {
         public LogedTurn(TaskSequencer taskSequencer) : base(taskSequencer) { }
 
@@ -39,11 +40,29 @@ public class TestTurns : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (_isRunning && Input.GetKeyDown(KeyCode.Space))
+        {
+            if (_currentTurn.Paused)
+            {
+                _currentTurn.Continue();
+            }
+            else
+            {
+                _currentTurn.Pause();
+            }
+        }
+    }
+
     void FixedUpdate()
     {
         if (_isRunning)
+        {
             return;
+        }
         var turn = new LogedTurn(_taskSequencer);
+        _currentTurn = turn;
         turn.AddListenerToStart(() => { _isRunning = true; });
         turn.AddListenerToEnd(() => { _isRunning = false; });
 
@@ -51,13 +70,13 @@ public class TestTurns : MonoBehaviour
         AddLog(Task.Priority.Medium);
         AddLog(Task.Priority.Medium);
         AddLog(Task.Priority.Low);
-        AddLog(Task.Priority.Hight);
+        AddLog(Task.Priority.High);
         AddLog(Task.Priority.Medium);
-        AddLog(Task.Priority.Hight);
+        AddLog(Task.Priority.High);
         AddLog(Task.Priority.Medium);
         AddLog(Task.Priority.Max);
 
-        StartCoroutine( turn.Run() );
+        StartCoroutine( _currentTurn.Run() );        
     }
 
     private void AddLog(Task.Priority priority)
