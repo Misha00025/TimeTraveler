@@ -54,7 +54,7 @@ namespace Model
             return this._objects[position];
         }
 
-        bool IsOccuped(UnityEngine.Vector2Int position)
+        public bool IsOccuped(UnityEngine.Vector2Int position)
         {
             return this._objects.ContainsKey(position);
         }
