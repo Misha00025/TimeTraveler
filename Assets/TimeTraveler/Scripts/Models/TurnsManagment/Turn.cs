@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
 using System.Linq;
-using UnityEngine;
 
 namespace Model
 {
     public class Turn
     {
-        private const int _maxIterations = 1000;
+        private const int _maxIterations = 1;
         private readonly ITaskSequencer _taskSequencer;
 
         private event Action _turnStarted;

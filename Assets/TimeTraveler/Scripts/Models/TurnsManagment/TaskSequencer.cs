@@ -9,6 +9,7 @@ namespace Model
         void AddTask(Task task, Task.Priority priority = Task.Priority.Medium);
     }
 
+
     public interface ITaskSequencer : IAddetiveTaskSequencer
     {
         int GetTasksCount(Task.Priority priority);        

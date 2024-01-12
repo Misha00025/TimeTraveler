@@ -6,6 +6,7 @@ namespace Model
     {
         public enum Priority
         {
+            Min,
             Low,
             Medium,
             High,
@@ -19,7 +20,7 @@ namespace Model
             _owner = owner;
         }
 
-        public object Owner { get { return _owner; } }
+        public object Owner => _owner;
 
         public abstract IEnumerator Execute();
     }

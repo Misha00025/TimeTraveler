@@ -23,7 +23,8 @@ namespace Model
 
         public override IEnumerator Execute()
         {
-            throw new System.NotImplementedException();
+            Debug.Log($"Task: Movement; Direction: {_direction}; Owner: {Owner}");
+            yield return null;
         }
     }
 }

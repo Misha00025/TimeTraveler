@@ -40,7 +40,12 @@ public class TestTurns : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    public void Start()
+    {
+        Test2();
+    }
+
+    private void Test1()
     {
         if (_isRunning)
         {
@@ -61,11 +66,47 @@ public class TestTurns : MonoBehaviour
         AddLog(Task.Priority.Medium);
         AddLog(Task.Priority.Max);
 
-        StartCoroutine( _currentTurn.Run() );        
+        StartCoroutine(_currentTurn.Run());
+    }
+
+    private void Test2()
+    {
+        if (_isRunning)
+        {
+            return;
+        }
+        Player player = new Player();
+        Unit unit = new Unit();
+        Model.Bullet bullet = new Model.Bullet();
+
+        AddTask(new Movement(Movement.Direction.Left, player));
+        AddTask(new Movement(Movement.Direction.Right, player));
+        AddTask(new Movement(Movement.Direction.Up, player));
+        AddTask(new Movement(Movement.Direction.Up, player));
+        AddTask(new Movement(Movement.Direction.Up, player));
+        AddTask(new Movement(Movement.Direction.Up, player));
+
+        /*AddTask(new Movement(Movement.Direction.Left, bullet));
+        AddTask(new Movement(Movement.Direction.Right, bullet));
+        AddTask(new Movement(Movement.Direction.Left, bullet));
+        AddTask(new Movement(Movement.Direction.Left, bullet));
+
+        AddTask(new Movement(Movement.Direction.Left, unit));
+        AddTask(new Movement(Movement.Direction.Right, unit));
+        AddTask(new Movement(Movement.Direction.Up, unit));
+        AddTask(new Movement(Movement.Direction.Up, unit));*/
+        
+
+        StartCoroutine( TurnsManager.Instance.StartTurn() );
     }
 
     private void AddLog(Task.Priority priority)
     {
-        _taskSequencer.AddTask(new TestTurns.Log($"Task priority: {priority}"), priority);
+        _taskSequencer.AddTask(new Log($"Task priority: {priority}"), priority);
+    }
+
+    private void AddTask(Task task)
+    {
+        TurnsManager.Instance.AddTask(task);
     }
 }

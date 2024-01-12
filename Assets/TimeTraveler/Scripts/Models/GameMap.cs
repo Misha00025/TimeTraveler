@@ -18,6 +18,16 @@ namespace Model
 
     }
 
+    public class Bullet : Object
+    {
+
+    }
+
+    public class Player : Unit
+    {
+
+    }
+
     public class GameMap
     {
         private Dictionary<Object, UnityEngine.Vector2Int> _positions = new();
