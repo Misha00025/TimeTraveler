@@ -16,6 +16,7 @@ public class CompositeRoot : MonoBehaviour
         _gameMap.AddListenerToEndOfLoad(InitInput);
         _gameMap.AddListenerToEndOfLoad(InitInteractive);
         this.InstanceEnemy();
+        this.InitDestroyable();
     }
 
     private void InitInput(GameMap gameMap)
@@ -40,6 +41,15 @@ public class CompositeRoot : MonoBehaviour
         foreach (EnemyAI enemy in enemies)
         {
             _gameMap.AddListenerToEndOfLoad(enemy.Init);
+        }
+    }
+
+    private void InitDestroyable()
+    {
+        var destroyables = FindObjectsByType<Destroyable>(FindObjectsSortMode.None);
+        foreach (var destr in destroyables)
+        {
+            destr.Init(_gameMap);
         }
     }
 }

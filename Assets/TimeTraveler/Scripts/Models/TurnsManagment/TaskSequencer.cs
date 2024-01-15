@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model.Tasks;
 
 namespace Model
 {
@@ -31,6 +32,16 @@ namespace Model
             }
         }
 
+        public int GetTasksCount()
+        {
+            int result = 0;
+            foreach (Task.Priority priority in Enum.GetValues(typeof(Task.Priority)))
+            {
+                result += _tasks[priority].Count;
+            }
+            return result;
+        }
+
         public int GetTasksCount(Task.Priority priority)
         {
             return _tasks[priority].Count;
@@ -46,8 +57,15 @@ namespace Model
             Task[] tasks = _tasks[priority].ToArray();
             _tasks[priority].Clear();
             foreach (Task task in tasks)
-            {                
-                yield return task.Execute();
+            {
+                try
+                {
+                    yield return task.Execute();
+                }
+                finally
+                {
+
+                }
             }
         }
 

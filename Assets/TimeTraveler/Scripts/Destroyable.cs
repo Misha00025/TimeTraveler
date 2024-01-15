@@ -1,13 +1,19 @@
 using System.Collections;
 using UnityEngine;
 
-public class Destroyable : MonoBehaviour
+public class Destroyable : MonoBehaviour, Model.IDestroyable
 {
+    private GameMap _gameMap;
 
-    public void Destroy(GameMap gameMap)
+    public void Init(GameMap gameMap)
+    {
+        _gameMap = gameMap;
+    }
+
+    public void Destroy()
     {
         Debug.Log("׃האכÿול מבתוךע");
-        gameMap.Remove(gameObject);
+        _gameMap.Remove(gameObject);
         Destroy(gameObject);
     }
 }

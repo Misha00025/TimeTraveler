@@ -1,3 +1,6 @@
+using Model;
+using Model.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +11,8 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private TimeTraveler _timeTraveler;
     private MoveValidator _moveValidator;
     private GameMap _gameMap;
+    private Vector2Int direction = Vector2Int.zero;
+    private Player _player;
 
     private CharacterMover Mover => this._character.Mover;
 
@@ -16,11 +21,11 @@ public class PlayerInput : MonoBehaviour
         this._character = character;
         this._moveValidator = validator;
         this._gameMap = gameMap;
+        _player = new Player();
     }
 
     void Update()
     {
-        Vector2Int direction = Vector2Int.zero;
         bool move = false;
         var action = this.GetAction();
         switch (action)
@@ -42,23 +47,33 @@ public class PlayerInput : MonoBehaviour
 
         if (move)
         {
-            Vector3Int position = this.Mover.CellPosition;
-            Vector3Int newPosition = this.Mover.CalculateNewPosition(direction);
-            Debug.Log($"Try move! Direction: {direction}; Next Position: {newPosition}");
-            bool canMove = this._moveValidator.CanMove(position, newPosition);
-            if (canMove)
-            {
-                this.Mover.Move(direction);
-                _timeTraveler.RememberDirection(direction);
-            }
-            else
-            {
-                if (_gameMap.TryGet<InteractiveObject>(newPosition, out var interactive))
-                {
-                    interactive.Use();
-                }
-            }
+            var task = new CustomTask(Move, _player);
+            TurnsManager.Instance.AddTask(task);
             StateMachine.Instance.Turn();
+        }
+    }
+
+    private IEnumerator Move()
+    {
+        Vector3Int position = this.Mover.CellPosition;
+        Vector3Int newPosition = this.Mover.CalculateNewPosition(direction);
+        Debug.Log($"Try move! Direction: {direction}; Next Position: {newPosition}");
+        bool canMove = this._moveValidator.CanMove(position, newPosition);
+        if (canMove)
+        {            
+            _timeTraveler.RememberDirection(direction);
+            this.Mover.Move(direction);
+            //while ((transform.position - _gameMap.GetCellWorldPosition(newPosition)).magnitude > 0.01)
+            //{
+                yield return null;
+            //}
+        }
+        else
+        {
+            if (_gameMap.TryGet<InteractiveObject>(newPosition, out var interactive))
+            {
+                interactive.Use();
+            }
         }
     }
 

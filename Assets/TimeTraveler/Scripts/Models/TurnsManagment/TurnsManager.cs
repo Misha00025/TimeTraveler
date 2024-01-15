@@ -1,3 +1,4 @@
+using Model.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Model
             
             switch (task)
             {
+                case Destroy:
+                    return Task.Priority.Max;
                 case Movement:
                     return GetMovementPriority(task);
                 case Shoot:
@@ -28,10 +31,10 @@ namespace Model
             {
                 case Player:
                     return Task.Priority.Max;
-                case Unit: 
-                    return Task.Priority.High;
                 case Bullet:
                     return Task.Priority.Medium;
+                case Unit: 
+                    return Task.Priority.High;
                 default:
                     return _defaultPriority;
             }
@@ -104,6 +107,7 @@ namespace Model
 
         public IEnumerator StartTurn()
         {
+            Debug.Log($"Turn Started; Tasks Count: {_taskSequencer.GetTasksCount()}");
             while (!_taskSequencer.IsEmpty())
             {
                 var turn = new Turn(_taskSequencer);

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Model
+namespace Model.Tasks
 {
     public class CustomTask : Task
     {

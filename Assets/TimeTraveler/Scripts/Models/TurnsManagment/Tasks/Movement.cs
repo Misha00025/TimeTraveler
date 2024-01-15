@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace Model
+
+namespace Model.Tasks
 {
     public class Movement : Task
     {
@@ -16,15 +15,14 @@ namespace Model
 
         private Direction _direction;
 
-        public Movement(Direction direction, Object owner) : base(owner)
+        public Movement(Direction direction, GameMap gameMap, Unit owner) : base(owner)
         {
             _direction = direction;
         }
 
         public override IEnumerator Execute()
         {
-            Debug.Log($"Task: Movement; Direction: {_direction}; Owner: {Owner}");
-            yield return null;
+            throw new System.NotImplementedException();
         }
     }
 }

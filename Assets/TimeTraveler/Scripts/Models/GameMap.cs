@@ -18,7 +18,7 @@ namespace Model
 
     }
 
-    public class Bullet : Object
+    public class Bullet : Unit
     {
 
     }
@@ -33,7 +33,7 @@ namespace Model
         private Dictionary<Object, UnityEngine.Vector2Int> _positions = new();
         private Dictionary<UnityEngine.Vector2Int, Object> _objects = new();
 
-        public void Add(Object obj, UnityEngine.Vector2Int position)
+        public void Set(Object obj, UnityEngine.Vector2Int position)
         {
             _positions.Add(obj, position);
             _objects.Add(position, obj);

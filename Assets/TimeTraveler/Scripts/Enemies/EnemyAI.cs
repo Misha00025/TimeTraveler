@@ -1,3 +1,5 @@
+using Model;
+using Model.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +14,9 @@ public class EnemyAI : MonoBehaviour, ITurnable
     private MoveValidator _moveValidator;
     private CharacterMover _characterMover;
     private BulletFactory _bulletFactory;
-    private int moveStep = 0;
+    private int moveStep = -1;
+
+    private Unit _unit = new Unit();
 
     public void Start()
     {
@@ -25,6 +29,8 @@ public class EnemyAI : MonoBehaviour, ITurnable
         _gameMap = gameMap;
         _characterMover.Init(_gameMap);
         _moveValidator = new MoveValidator(_gameMap);
+        if (TryGetComponent<Destroyable>(out var destroyable))
+            destroyable.Init(_gameMap);
         StateMachine.Instance.AddTurnable(this);
     }
 
@@ -32,29 +38,50 @@ public class EnemyAI : MonoBehaviour, ITurnable
     {
         if (moveStep < _actions.Count)
         {
-            var currentAction = _actions[moveStep++];
+            moveStep++;
+            if (moveStep >= _actions.Count && _isMovesLooped)
+            {
+                moveStep = 0;
+            }
+            var currentAction = _actions[moveStep];
 
             bool isMove = _characterMover.TryCastDirection(currentAction, out var direction);
             if (isMove)
             {
-                Debug.Log($"Moving into{direction}");
-                bool canMove = _moveValidator.CanMove(_characterMover.CellPosition, _characterMover.CalculateNewPosition(direction));
-                if (canMove)
-                {
-                    _characterMover.Move(direction);
-                    currentDirection = direction;
-                }
+                var task = new CustomTask(Move, _unit);
+                TurnsManager.Instance.AddTask(task);
             }
 
             if (currentAction == GameAction.Attack)
             {
-                _bulletFactory.CreateBullet(_characterMover.CellPosition, currentDirection, _gameMap).OnTurn();
+                var task = new CustomTask(SpawnBullet, _unit);
+                TurnsManager.Instance.AddTask(task);                
             }
         }
+    }
 
-        if (moveStep >= _actions.Count && _isMovesLooped)
+    private IEnumerator SpawnBullet()
+    {
+        _bulletFactory.CreateBullet(_characterMover.CellPosition, currentDirection, _gameMap).OnTurn();
+        yield return null;
+    }
+
+    private IEnumerator Move()
+    {
+        var currentAction = _actions[moveStep];
+        _characterMover.TryCastDirection(currentAction, out var direction);
+        Debug.Log($"Moving into{direction}");
+        var newPosition = _characterMover.CalculateNewPosition(direction);
+        bool canMove = _moveValidator.CanMove(_characterMover.CellPosition, newPosition);
+        if (canMove)
         {
-            moveStep = 0;
+            _characterMover.Move(direction);
+            currentDirection = direction;
+            //while ((transform.position - _gameMap.GetCellWorldPosition(newPosition)).magnitude > 0.01)
+            //{
+            //}
         }
+
+        yield return null;
     }
 }

@@ -1,12 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public interface IMovable
-{
-    void Move(Vector2Int direction);
-}
-
-public class CharacterMover : MonoBehaviour, IMovable
+public class CharacterMover : MonoBehaviour, Model.IMovable
 {
     [SerializeField] private float _speed = 1f;
     private GameMap _gameMap;

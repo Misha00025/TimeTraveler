@@ -1,3 +1,4 @@
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,11 +34,12 @@ public class StateMachine : MonoBehaviour
         this._turnEnded.AddListener(turnable.OnTurn);
     }
 
-    public void AddToDestroy(Destroyable destroyable)
+    public void AddToDestroy(Destroyable destroyable, Model.Object owner)
     {
-        if (_destroyables.Contains(destroyable))
-            return;
-        _destroyables.Enqueue(destroyable);
+        TurnsManager.Instance.AddTask(new Model.Tasks.Destroy(destroyable, owner));
+        //if (_destroyables.Contains(destroyable))
+           // return;
+        //_destroyables.Enqueue(destroyable);
     }
 
     public void Turn()
@@ -48,10 +50,11 @@ public class StateMachine : MonoBehaviour
 
     public void EndTurn()
     {
+        StartCoroutine(TurnsManager.Instance.StartTurn());
         while (_destroyables.Count > 0)
         {
             Destroyable destroyable = _destroyables.Dequeue();
-            destroyable.Destroy(_gameMap);
+            destroyable.Destroy();
         }
     }
 }

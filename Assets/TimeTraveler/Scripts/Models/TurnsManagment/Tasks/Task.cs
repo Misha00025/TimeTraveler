@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Model
+namespace Model.Tasks
 {
     public abstract class Task
     {
