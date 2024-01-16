@@ -20,7 +20,7 @@ public class TimeTraveler
         _lastDirections.Enqueue(cell);
     }
 
-    public void UseAbility(PlayerCharacter player)
+    public void UseAbility(PlayerView player)
     {
         if (_lastDirections.Count <= 0) 
         {
@@ -31,19 +31,6 @@ public class TimeTraveler
         {
             Debug.LogError("No usees left :(");
             return;
-        }
-
-        var characterMover = player.Mover;
-        foreach (var direction in _lastDirections)
-        {
-            if (_lastDirections.Count > 1)
-            {
-                characterMover.RawMove(direction * -1);
-            } else
-            {
-                characterMover.Move(direction * -1);  
-            }
-
         }
         _lastDirections.Clear();
     }

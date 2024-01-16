@@ -7,7 +7,7 @@ namespace Model.Tasks
     {
         private Func<IEnumerator> _action;
 
-        public CustomTask(Func<IEnumerator> action, object owner) : base(owner)
+        public CustomTask(Func<IEnumerator> action, Object owner) : base(owner)
         {
             _action = action;
         }

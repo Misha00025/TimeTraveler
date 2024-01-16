@@ -13,14 +13,14 @@ namespace Model.Tasks
             Max
         }
 
-        private readonly object _owner;
+        private readonly Object _owner;
 
-        public Task(object owner)
+        public Task(Object owner)
         {
             _owner = owner;
         }
 
-        public object Owner => _owner;
+        public Object Owner => _owner;
 
         public abstract IEnumerator Execute();
     }

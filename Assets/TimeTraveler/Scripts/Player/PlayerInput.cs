@@ -6,39 +6,32 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    private PlayerCharacter _character;
     [SerializeField] private List<GameAction> gameActions;
     [SerializeField] private TimeTraveler _timeTraveler;
-    private MoveValidator _moveValidator;
-    private GameMap _gameMap;
-    private Vector2Int direction = Vector2Int.zero;
     private Player _player;
 
-    private CharacterMover Mover => this._character.Mover;
-
-    public void Init(PlayerCharacter character, MoveValidator validator, GameMap gameMap)
+    public void Init(Player player)
     {
-        this._character = character;
-        this._moveValidator = validator;
-        this._gameMap = gameMap;
-        _player = new Player();
+        this._player = player;
     }
 
     void Update()
     {
         bool move = false;
         var action = this.GetAction();
+        var direction = Movement.Direction.Down;
         switch (action)
         {
             case GameAction.Left:
             case GameAction.Right:
             case GameAction.Up:
             case GameAction.Down:
-                move = this._character.Mover.TryCastDirection(action, out direction);
+                direction = CastDirection(action);
+                move = true;
                 break;
             case GameAction.TimeTravelAbility:
                 Debug.Log("Travel Action");
-                _timeTraveler.UseAbility(this._character);
+                //_timeTraveler.UseAbility(this._character);
                 break;
             case GameAction.MainAction:
                 Debug.Log("Main Action");
@@ -47,34 +40,26 @@ public class PlayerInput : MonoBehaviour
 
         if (move)
         {
-            var task = new CustomTask(Move, _player);
+            var task = new Movement(direction, _player);
             TurnsManager.Instance.AddTask(task);
             StateMachine.Instance.Turn();
         }
     }
 
-    private IEnumerator Move()
+    private Movement.Direction CastDirection(GameAction action)
     {
-        Vector3Int position = this.Mover.CellPosition;
-        Vector3Int newPosition = this.Mover.CalculateNewPosition(direction);
-        Debug.Log($"Try move! Direction: {direction}; Next Position: {newPosition}");
-        bool canMove = this._moveValidator.CanMove(position, newPosition);
-        if (canMove)
-        {            
-            _timeTraveler.RememberDirection(direction);
-            this.Mover.Move(direction);
-            //while ((transform.position - _gameMap.GetCellWorldPosition(newPosition)).magnitude > 0.01)
-            //{
-                yield return null;
-            //}
-        }
-        else
+        switch (action)
         {
-            if (_gameMap.TryGet<InteractiveObject>(newPosition, out var interactive))
-            {
-                interactive.Use();
-            }
+            case GameAction.Up:
+                return Movement.Direction.Up;
+            case GameAction.Down:
+                return Movement.Direction.Down;
+            case GameAction.Left:
+                return Movement.Direction.Left;
+            case GameAction.Right:
+                return Movement.Direction.Right;
         }
+        return Movement.Direction.Up;
     }
 
     private GameAction GetAction()

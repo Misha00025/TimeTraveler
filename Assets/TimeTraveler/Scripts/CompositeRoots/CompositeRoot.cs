@@ -1,55 +1,81 @@
-using System.Collections.Generic;
+using Model;
+using Model.Tasks;
 using UnityEngine;
 
 public class CompositeRoot : MonoBehaviour
 {
-    [SerializeField] private GameMap _gameMap;
-
     [Header("Player")]
-    [SerializeField] private PlayerCharacter _player;
+    [SerializeField] private PlayerView _player;
     [SerializeField] private PlayerInput _input;
 
+    private GameMapView _gameMapView;
+
+    private Model.IGameMap _gameMap;
+
+
+    private class ObservedGameMap : Observed<IGameMap>, IGameMap
+    {
+        public ObservedGameMap(IGameMap observed) : base(observed)
+        {
+        }
+
+        public Vector3Int GetCell(Vector3Int position, Movement.Direction direction) => _observed.GetCell(position, direction);
+
+        public Model.Object GetObject(Vector3Int position) => _observed.GetObject(position);
+
+        public Vector3Int GetPosition(Model.Object obj) => _observed.GetPosition(obj);
+
+        public bool IsOccuped(Vector3Int position) => _observed.IsOccuped(position);
+
+        public void Remove(Model.Object obj)
+        {
+            _observed.Remove(obj);
+        }
+
+        public void Set(Model.Object obj, Vector3Int position)
+        {
+            _observed.Set(obj, position);
+            Invoke();
+        }
+    }
+
+
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        _gameMap.AddListenerToEndOfLoad(_player.Init);
-        _gameMap.AddListenerToEndOfLoad(InitInput);
-        _gameMap.AddListenerToEndOfLoad(InitInteractive);
-        this.InstanceEnemy();
-        this.InitDestroyable();
+        var obsGM = new ObservedGameMap(new GameMap());
+        _gameMap = obsGM;       
+        Instancies.Mover = new Mover(_gameMap);
+        FindReferences();
+        _gameMapView.SetModel(_gameMap);
+        InitPlayer();
+        InitObjectsViews();
+
+        _gameMapView.UpdateView();
+        obsGM.AddListener(_gameMapView.UpdateView);
     }
 
-    private void InitInput(GameMap gameMap)
+    private void InitPlayer()
     {
-        _input.Init(_player, new MoveValidator(gameMap), gameMap);
+        var player = new Player();
+        _player.SetModel(player);
+        _input.Init(player);
     }
 
-    private void InitInteractive(GameMap gameMap)
+    private void FindReferences()
     {
-        InteractiveObject[] interactives = FindObjectsByType<InteractiveObject>(FindObjectsSortMode.None);
-        foreach (InteractiveObject interactiveObject in interactives)
+        _gameMapView = FindObjectOfType<GameMapView>();
+    }
+
+    private void InitObjectsViews()
+    {
+        ObjectView[] objectViews = FindObjectsByType<ObjectView>(FindObjectsSortMode.None);
+        foreach (ObjectView objectView in objectViews)
         {
-            Vector3Int cell = _gameMap.GetCell(interactiveObject.transform.position);
-            interactiveObject.transform.position = _gameMap.GetCellWorldPosition(cell);
-            _gameMap.Set(interactiveObject.gameObject, cell);
-        }
-    }
-
-    private void InstanceEnemy()
-    {
-        EnemyAI[] enemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
-        foreach (EnemyAI enemy in enemies)
-        {
-            _gameMap.AddListenerToEndOfLoad(enemy.Init);
-        }
-    }
-
-    private void InitDestroyable()
-    {
-        var destroyables = FindObjectsByType<Destroyable>(FindObjectsSortMode.None);
-        foreach (var destr in destroyables)
-        {
-            destr.Init(_gameMap);
+            var cell = _gameMapView.Grid.WorldToCell(objectView.transform.position);
+            _gameMap.Set(objectView.Model, cell);
+            objectView.Init(_gameMapView.Grid);
+            _gameMapView.AddObjectView(objectView);
         }
     }
 }

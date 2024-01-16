@@ -14,7 +14,7 @@ namespace Model.Tasks
     {
         IDestroyable _destroyable;
 
-        public Destroy(IDestroyable destroyable, object owner) : base(owner)
+        public Destroy(IDestroyable destroyable, Object owner) : base(owner)
         {
             _destroyable = destroyable;
         }

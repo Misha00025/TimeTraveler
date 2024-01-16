@@ -15,14 +15,15 @@ namespace Model.Tasks
 
         private Direction _direction;
 
-        public Movement(Direction direction, GameMap gameMap, Unit owner) : base(owner)
+        public Movement(Direction direction, Unit owner) : base(owner)
         {
             _direction = direction;
         }
 
         public override IEnumerator Execute()
         {
-            throw new System.NotImplementedException();
+            Instancies.Mover.Move(Owner, _direction);
+            yield return null;
         }
     }
 }
